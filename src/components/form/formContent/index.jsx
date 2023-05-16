@@ -4,6 +4,7 @@ import { useAccount } from '../../../hooks/useAccount'
 import { PayPalButtons } from '@paypal/react-paypal-js'
 import { useState } from 'react'
 import { Notification } from '../../notification'
+import { sendEmail } from '../../../services/emailer'
 
 export function FormContent () {
   const { userInfo, setUserInfo } = useAccount()
@@ -50,24 +51,29 @@ export function FormContent () {
               }}
               onApprove={(data, actions) => {
                 return actions.order.capture().then((details) => {
-                  setPaymentSuccess(true)
+                  const { name, lastName, email } = userInfo
+                  sendEmail(name, lastName, email).then((data) => {
+                    if (data) {
+                      setPaymentSuccess(true)
 
-                  setTimeout(() => {
-                    setPaymentSuccess(false)
-                  }, 4000)
+                      setTimeout(() => {
+                        setPaymentSuccess(false)
+                      }, 4000)
+                    }
+                  })
                 })
               }}
             />
           </div>
           )
         : (
-          <button className='px-3 py-2 bg-[#3c37ff] text-white rounded'>Comprar</button>
+          <button className='px-3 py-2 bg-[#3c37ff] text-white rounded mb-[60px]'>Comprar</button>
           )
      }
 
       </form>
       {
-        paymentSuccess && <Notification>El pago ser realizo con exito!!</Notification>
+        paymentSuccess && <Notification>El pago ser realizó con exito!! Revisa tu correo electronico para mas info. :) </Notification>
       }
     </>
   )

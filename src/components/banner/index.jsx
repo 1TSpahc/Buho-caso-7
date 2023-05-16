@@ -7,7 +7,7 @@ export function Banner () {
 
       <div className='text-white'>
         <h3 className='text-3xl'>Elige tu metodo de pago</h3>
-        <p className='text-1xl text-[#c6cbff] py-4'>Aqui podras escoger entre diferente pasarelas de pagos peruanas</p>
+        <p className='text-1xl text-[#c6cbff] py-4'>Actualmente contamos con un solo metodo de pago. :)</p>
       </div>
 
       <ListPaymentMethods />
