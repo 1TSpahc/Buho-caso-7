@@ -2,7 +2,7 @@
 ## Plataforma de pagos con paypal.
 
 ### Credenciales de prueba:
-6
+
 ![Primer Diseno](./screenshots/5.png)
 
 ![Primer Diseno](./screenshots/1.png)

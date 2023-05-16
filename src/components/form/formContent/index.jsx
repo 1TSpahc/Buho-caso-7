@@ -5,16 +5,21 @@ import { PayPalButtons } from '@paypal/react-paypal-js'
 import { useState } from 'react'
 import { Notification } from '../../notification'
 import { sendEmail } from '../../../services/emailer'
+import { Loader } from '../../loader'
 
 export function FormContent () {
   const { userInfo, setUserInfo } = useAccount()
+
   const [showPaypalButton, setShowPaypalButton] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   const handleSumbit = (event) => {
     event.preventDefault()
+
     const { nombre, apellido, correo } = Object.fromEntries(new FormData(event.target))
     const newObj = structuredClone(userInfo)
+
     newObj.name = nombre
     newObj.lastName = apellido
     newObj.email = correo
@@ -51,10 +56,13 @@ export function FormContent () {
               }}
               onApprove={(data, actions) => {
                 return actions.order.capture().then((details) => {
+                  setLoader(true)
+
                   const { name, lastName, email } = userInfo
                   sendEmail(name, lastName, email).then((data) => {
                     if (data) {
                       setPaymentSuccess(true)
+                      setLoader(false)
 
                       setTimeout(() => {
                         setPaymentSuccess(false)
@@ -73,7 +81,11 @@ export function FormContent () {
 
       </form>
       {
-        paymentSuccess && <Notification>El pago ser realizó con exito!! Revisa tu correo electronico para mas info. :) </Notification>
+      paymentSuccess && <Notification>El pago ser realizó con exito!! Revisa tu correo electronico para mas info. :) </Notification>
+
+      }
+      {
+        loader && <Loader />
       }
     </>
   )
